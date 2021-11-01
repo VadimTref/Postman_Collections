@@ -1,0 +1,1002 @@
+{
+	"info": {
+		"_postman_id": "ec410f40-d82a-4119-b414-0cf80b05ca9e",
+		"name": "Ca-Marketing_with_Env_Runner",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Create new address",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// test with if-else\r",
+							"if (responseCode.code === 200) {\r",
+							"    tests[\"Backend is OK, response code is 200.\"] = true;\r",
+							"} else if (responseCode.code === 401) {\r",
+							"    tests[\"Not autorised, response code is 401.\"] = false;\r",
+							"} else if (responseCode.code === 403) {\r",
+							"    tests[\"Forbiden, response code is 403.\"] = false;\r",
+							"} else if (responseCode.code === 404) {\r",
+							"    tests[\"Not found, response code is 404.\"] = false;\r",
+							"} else if (responseCode.code === 422) {\r",
+							"    tests[\"Thr instance is not valid, response code is 422.\"] = false;\r",
+							"} else {\r",
+							"    tests[\"Something went wrong. Check response body.\"] = false;\r",
+							"}\r",
+							"\r",
+							"//Way to set Environment Variable ID by JSON parse\r",
+							"var jsonData = JSON.parse(responseBody);\r",
+							"pm.environment.set(\"ID\", jsonData.id);\r",
+							"\r",
+							"//One more way to set Environment Variable ID\r",
+							"// const jsonData = pm.response.json();\r",
+							"// pm.environment.set(\"ID\", jsonData.id);\r",
+							"\r",
+							"// Check ID is correct in Env\r",
+							"pm.test(\"ID is correct\", function () {\r",
+							"    const jsonData = pm.response.json(); \r",
+							"    pm.expect(jsonData.id).to.eql(pm.environment.get(\"ID\"));\r",
+							"});\r",
+							"\r",
+							"// same test as above\r",
+							"pm.test(\"ID is correct2\", function () {\r",
+							"    const jsonData = pm.response.json(); // may not write if present above (21)\r",
+							"    pm.expect(jsonData.id).to.eql(pm.environment.get(\"ID\"));\r",
+							"});\r",
+							"\r",
+							"// Response have string \"id\"\r",
+							"pm.test(\"Body contains 'id'\", function () {\r",
+							"    pm.expect(pm.response.text()).to.include(\"id\");\r",
+							"});\r",
+							"\r",
+							"// Assertions like a part of test, \r",
+							"// if any assertion throws error, test will fail\r",
+							"pm.test(\"Response assertions\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"    pm.response.to.be.ok;\r",
+							"    pm.response.to.be.json;\r",
+							"    pm.response.to.not.be.error;\r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.not.have.jsonBody(\"error\");\r",
+							"});\r",
+							"\r",
+							"// Check Header\r",
+							"pm.test(\"Header is correct\", function () {\r",
+							"    pm.response.to.have.header(\"Content-Type\", \"application/json;charset=utf-8\");\r",
+							"    pm.response.to.have.header(\"Content-Length\", \"45\");\r",
+							"    pm.response.to.have.header(\"Connection\", \"keep-alive\");\r",
+							"    pm.response.to.have.header(\"X-Content-Type-Options\", \"nosniff\");   \r",
+							"    pm.response.to.have.header(\"Server\", \"Pepyaka/1.15.10\");\r",
+							"});\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.environment.unset(\"ID\");\r",
+							"pm.environment.unset(\"company\");"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"address\": {\r\n        \"fullName\": {\r\n            \"firstName\": \"Vladimir\",\r\n            \"lastName\": \"OPERATOR\"\r\n        },\r\n        \"company\": \"iks corp\",\r\n        \"taxInfo\": {\r\n            \"id\": null,\r\n            \"type\": null\r\n        },\r\n        \"addressLine1\": \"8973 Bay Park\",\r\n        \"addressLine2\": \"apt.123\",\r\n        \"street\": {\r\n            \"name\": null,\r\n            \"number\": null\r\n        },\r\n        \"city\": \"Brooklyn\",\r\n        \"country\": \"USA\",\r\n        \"subdivision\": \"NY\",\r\n        \"zipCode\": \"11214\",\r\n        \"phoneNumber\": \"1234567890\",\r\n        \"location\": null\r\n    },\r\n    \"setAsDefault\": false\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}",
+					"host": [
+						"{{url}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Make default address",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// test with if-else\r",
+							"if (responseCode.code === 200) {\r",
+							"    tests[\"Backend is OK, response code is 200.\"] = true;\r",
+							"} else if (responseCode.code === 401) {\r",
+							"    tests[\"Not autorised, response code is 401.\"] = false;\r",
+							"} else if (responseCode.code === 403) {\r",
+							"    tests[\"Forbiden, response code is 403.\"] = false;\r",
+							"} else if (responseCode.code === 404) {\r",
+							"    tests[\"Not found, response code is 404.\"] = false;\r",
+							"} else if (responseCode.code === 422) {\r",
+							"    tests[\"Thr instance is not valid, response code is 422.\"] = false;\r",
+							"} else {\r",
+							"    tests[\"Something went wrong. Check response body.\"] = false;\r",
+							"}\r",
+							"\r",
+							"// same test with Switch\r",
+							"switch (responseCode.code) {\r",
+							"    case 200:\r",
+							"        tests[\"Code is 200. The request is succeded.\"] = true;\r",
+							"        break;\r",
+							"    case 400:\r",
+							"        tests[\"Code is 400. Bad request.\"] = false;\r",
+							"        break;\r",
+							"    case 404:\r",
+							"        tests[\"Code is 404. Not found.\"] = false;\r",
+							"        break;\r",
+							"    case 401:\r",
+							"        tests[\"Code is 401. Unautorised.\"] = false;\r",
+							"        break;\r",
+							"    case 500:\r",
+							"        tests[\"Code is 500. Internal server error.\"] = false;\r",
+							"        break;\r",
+							"    case 503:\r",
+							"        tests[\"Code is 503. Service unavailable \"] = false;\r",
+							"        break;\r",
+							"    case 502:\r",
+							"        tests[\"Code is 502. Bad gateway.\"] = false;\r",
+							"        break;\r",
+							"    case 509:\r",
+							"        tests[\"Code is 509. Network connect timeout error\"] = false;\r",
+							"        break;\r",
+							"    case 408:\r",
+							"        tests[\"Code is 408. Request timeout error\"] = false;\r",
+							"        break;\r",
+							"    default:\r",
+							"        tests[\"Sorry, we are out of\" + responseCode.code] = false;\r",
+							"}\r",
+							"\r",
+							"// Standart response - response 200\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"// One more test to check response code\r",
+							"tests[\"Status code is 200\"] = responseCode.code === 200;\r",
+							"\r",
+							"// Check Response time\r",
+							"pm.test(\"Response time is less than 1000ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+							"});\r",
+							"\r",
+							"// One more test to check response time\r",
+							"tests[\"Response time is acceptable\"] = responseTime < 1000;\r",
+							"\r",
+							"// Check Response size\r",
+							"pm.test(\"Response size is less than 2000\", function () {\r",
+							"    pm.expect(pm.response.responseSize).to.be.below(2000);\r",
+							"});\r",
+							"\r",
+							"// Response have string \"{}\"\r",
+							"pm.test(\"Body contains '{}'\", function () {\r",
+							"    pm.expect(pm.response.text()).to.include(\"{}\");\r",
+							"});\r",
+							"\r",
+							"// Check Header\r",
+							"pm.test(\"Header is correct\", function () {\r",
+							"    pm.response.to.have.header(\"Content-Type\", \"application/json;charset=utf-8\");\r",
+							"    // pm.response.to.have.header(\"Content-Length\", \"2\");\r",
+							"    pm.response.to.have.header(\"Connection\", \"keep-alive\");\r",
+							"    pm.response.to.have.header(\"X-Content-Type-Options\", \"nosniff\");   \r",
+							"    pm.response.to.have.header(\"Server\", \"Pepyaka/1.15.10\");\r",
+							"});\r",
+							"\r",
+							"// Assertions like a part of test, \r",
+							"// if any assertion throws error, test will fail\r",
+							"pm.test(\"Response assertions\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"    pm.response.to.be.ok;\r",
+							"    pm.response.to.be.json;\r",
+							"    pm.response.to.not.be.error;\r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.not.have.jsonBody(\"error\");\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\": \"{{ID}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/default",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"default"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Show all addresses",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// test with if-else\r",
+							"if (responseCode.code === 200) {\r",
+							"    tests[\"Backend is OK, response code is 200.\"] = true;\r",
+							"} else if (responseCode.code === 401) {\r",
+							"    tests[\"Not autorised, response code is 401.\"] = false;\r",
+							"} else if (responseCode.code === 403) {\r",
+							"    tests[\"Forbiden, response code is 403.\"] = false;\r",
+							"} else if (responseCode.code === 404) {\r",
+							"    tests[\"Not found, response code is 404.\"] = false;\r",
+							"} else if (responseCode.code === 422) {\r",
+							"    tests[\"Thr instance is not valid, response code is 422.\"] = false;\r",
+							"} else {\r",
+							"    tests[\"Something went wrong. Check response body.\"] = false;\r",
+							"}\r",
+							"\r",
+							"// same test with Switch\r",
+							"switch (responseCode.code) {\r",
+							"    case 200:\r",
+							"        tests[\"Code is 200. The request is succeded.\"] = true;\r",
+							"        break;\r",
+							"    case 400:\r",
+							"        tests[\"Code is 400. Bad request.\"] = false;\r",
+							"        break;\r",
+							"    case 404:\r",
+							"        tests[\"Code is 404. Not found.\"] = false;\r",
+							"        break;\r",
+							"    case 401:\r",
+							"        tests[\"Code is 401. Unautorised.\"] = false;\r",
+							"        break;\r",
+							"    case 500:\r",
+							"        tests[\"Code is 500. Internal server error.\"] = false;\r",
+							"        break;\r",
+							"    case 503:\r",
+							"        tests[\"Code is 503. Service unavailable \"] = false;\r",
+							"        break;\r",
+							"    case 502:\r",
+							"        tests[\"Code is 502. Bad gateway.\"] = false;\r",
+							"        break;\r",
+							"    case 509:\r",
+							"        tests[\"Code is 509. Network connect timeout error\"] = false;\r",
+							"        break;\r",
+							"    case 408:\r",
+							"        tests[\"Code is 408. Request timeout error\"] = false;\r",
+							"        break;\r",
+							"    default:\r",
+							"        tests[\"Sorry, we are out of\" + responseCode.code] = false;\r",
+							"}\r",
+							"\r",
+							"// Assertions like a part of test, \r",
+							"// if any assertion throws error, test will fail\r",
+							"pm.test(\"Response assertions\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"    pm.response.to.be.ok;\r",
+							"    pm.response.to.be.json;\r",
+							"    pm.response.to.not.be.error;\r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.not.have.jsonBody(\"error\");\r",
+							"});\r",
+							"\r",
+							"// Response have new ID - partition assert\"\r",
+							"pm.test(\"New ID is in Response'\", function () {\r",
+							"    pm.expect(pm.response.text()).to.include(pm.environment.get(\"ID\"));\r",
+							"});\r",
+							"\r",
+							"// Check Header\r",
+							"pm.test(\"Header is correct\", function () {\r",
+							"    pm.response.to.have.header(\"Content-Type\", \"application/json;charset=utf-8\");\r",
+							"    // pm.response.to.have.header(\"Content-Length\", \"2\");\r",
+							"    pm.response.to.have.header(\"Connection\", \"keep-alive\");\r",
+							"    pm.response.to.have.header(\"X-Content-Type-Options\", \"nosniff\");   \r",
+							"    pm.response.to.have.header(\"Server\", \"Pepyaka/1.15.10\");\r",
+							"});\r",
+							"\r",
+							"// Standart response - response 200\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"// Check Response time\r",
+							"pm.test(\"Response time is less than 1000ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+							"});\r",
+							"\r",
+							"// New tests on Code, Time\r",
+							"tests ['Response Code is 200 OK'] = responseCode.code === 200;\r",
+							"tests ['Response Time is Acceptable OK'] = responseTime < 1000;\r",
+							"\r",
+							"// Check Response size\r",
+							"pm.test(\"Response size is less than 2000B\", function () {\r",
+							"    pm.expect(pm.response.responseSize).to.be.below(1000);\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{url}}",
+					"host": [
+						"{{url}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Show spec address",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// test with if-else\r",
+							"if (responseCode.code === 200) {\r",
+							"    tests[\"Backend is OK, response code is 200.\"] = true;\r",
+							"} else if (responseCode.code === 401) {\r",
+							"    tests[\"Not autorised, response code is 401.\"] = false;\r",
+							"} else if (responseCode.code === 403) {\r",
+							"    tests[\"Forbiden, response code is 403.\"] = false;\r",
+							"} else if (responseCode.code === 404) {\r",
+							"    tests[\"Not found, response code is 404.\"] = false;\r",
+							"} else if (responseCode.code === 422) {\r",
+							"    tests[\"Thr instance is not valid, response code is 422.\"] = false;\r",
+							"} else {\r",
+							"    tests[\"Something went wrong. Check response body.\"] = false;\r",
+							"}\r",
+							"\r",
+							"// Assertions like a part of test, \r",
+							"// if any assertion throws error, test will fail\r",
+							"pm.test(\"Response assertions\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"    pm.response.to.be.ok;\r",
+							"    pm.response.to.be.json;\r",
+							"    pm.response.to.not.be.error;\r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.not.have.jsonBody(\"error\");\r",
+							"});\r",
+							"\r",
+							"// Check spec address with new ID  value\r",
+							"pm.test(\"ID is correct\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"     pm.expect(jsonData.address.id).to.eql(pm.environment.get(\"ID\"));\r",
+							"});\r",
+							"\r",
+							"// Same test as above\r",
+							"pm.test(\"ID is correct2\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"     pm.expect(jsonData.address.id).to.eql(environment.ID); // other syntax\r",
+							"});\r",
+							"\r",
+							"// Check body of correct format \r",
+							"pm.test(\"Response body in correct format\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.address).to.be.a('object');   \r",
+							"    pm.expect(jsonData.address.fullName).to.be.a('object');       \r",
+							"    pm.expect(jsonData.address.fullName.firstName).to.be.a('string'); \r",
+							"    pm.expect(jsonData.address.fullName.lastName).to.be.a('string'); \r",
+							"    pm.expect(jsonData.address.country).to.be.a('string');\r",
+							"    pm.expect(jsonData.address.subdivision).to.be.a('string'); \r",
+							"    pm.expect(jsonData.address.city).to.be.a('string');  \r",
+							"    pm.expect(jsonData.address.zipCode).to.be.a('string');     \r",
+							"    pm.expect(jsonData.address.phoneNumber).to.be.a('string');     \r",
+							"    pm.expect(jsonData.address.addressLine1).to.be.a('string');  \r",
+							"    pm.expect(jsonData.address.addressLine2).to.be.a('string'); \r",
+							"    pm.expect(jsonData.address.id).to.be.a('string'); \r",
+							"    pm.expect(jsonData.isDefaultAddress).to.be.a('boolean'); \r",
+							"});\r",
+							"\r",
+							"// Check Header\r",
+							"pm.test(\"Header is correct\", function () {\r",
+							"    pm.response.to.have.header(\"Content-Type\", \"application/json;charset=utf-8\");\r",
+							"    // pm.response.to.have.header(\"Content-Length\", \"2\");\r",
+							"    pm.response.to.have.header(\"Connection\", \"keep-alive\");\r",
+							"    pm.response.to.have.header(\"X-Content-Type-Options\", \"nosniff\");   \r",
+							"    pm.response.to.have.header(\"Server\", \"Pepyaka/1.15.10\");\r",
+							"});\r",
+							"\r",
+							"// Check phone number\r",
+							"pm.test(\"Phone number is correct\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.address.phoneNumber).to.eql(\"1234567890\");\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{url}}/?id={{ID}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						""
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "{{ID}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Modify existing address",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// test with if-else\r",
+							"if (responseCode.code === 200) {\r",
+							"    tests[\"Backend is OK, response code is 200.\"] = true;\r",
+							"} else if (responseCode.code === 401) {\r",
+							"    tests[\"Not autorised, response code is 401.\"] = false;\r",
+							"} else if (responseCode.code === 403) {\r",
+							"    tests[\"Forbiden, response code is 403.\"] = false;\r",
+							"} else if (responseCode.code === 404) {\r",
+							"    tests[\"Not found, response code is 404.\"] = false;\r",
+							"} else if (responseCode.code === 422) {\r",
+							"    tests[\"Thr instance is not valid, response code is 422.\"] = false;\r",
+							"} else {\r",
+							"    tests[\"Something went wrong. Check response body.\"] = false;\r",
+							"}\r",
+							"\r",
+							"// Response OK to process \r",
+							"pm.test(\"Response assertions\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"    pm.response.to.be.ok;\r",
+							"    pm.response.to.be.json;\r",
+							"    pm.response.to.not.be.error;\r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.not.have.jsonBody(\"error\");\r",
+							"    pm.response.to.have.jsonBody({});            \r",
+							"});\r",
+							"\r",
+							"// Check Response time\r",
+							"pm.test(\"Response time is less than 1000ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+							"});\r",
+							"\r",
+							"// Check Response size\r",
+							"pm.test(\"Response size is less than 2000\", function () {\r",
+							"    pm.expect(pm.response.responseSize).to.be.below(2000);\r",
+							"});\r",
+							"\r",
+							"// Check Header\r",
+							"pm.test(\"Header is correct\", function () {\r",
+							"    pm.response.to.have.header(\"Content-Type\", \"application/json;charset=utf-8\");\r",
+							"    // pm.response.to.have.header(\"Content-Length\", \"2\");\r",
+							"    pm.response.to.have.header(\"Connection\", \"keep-alive\");\r",
+							"    pm.response.to.have.header(\"X-Content-Type-Options\", \"nosniff\");   \r",
+							"    pm.response.to.have.header(\"Server\", \"Pepyaka/1.15.10\");\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"// Time in ms from 01/01/1970\r",
+							"pm.environment.set(\"company\", \"SvoyaComp-\" + new Date().getTime());"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"address\": {\r\n        \"id\": \"{{ID}}\",\r\n        \"fullName\": {\r\n            \"firstName\": \"Vladimir\",\r\n            \"lastName\": \"OPERATOR\"\r\n        },\r\n        \"company\": \"{{company}}\",\r\n        \"taxInfo\": {\r\n            \"id\": null,\r\n            \"type\": null\r\n        },\r\n        \"addressLine1\": \"8973 Bay Park\",\r\n        \"addressLine2\": \"apt.123\",\r\n        \"street\": {\r\n            \"name\": null,\r\n            \"number\": null\r\n        },\r\n        \"city\": \"Brooklyn\",\r\n        \"country\": \"USA\",\r\n        \"subdivision\": \"NY\",\r\n        \"zipCode\": \"11214\",\r\n        \"phoneNumber\": \"1234567890\",\r\n        \"location\": null\r\n    },\r\n    \"setAsDefault\": true,\r\n    \"fieldMask\": {\r\n        \"paths\": [\r\n            \"fullName.firstName\",\r\n            \"fullName.lastName\",\r\n            \"company\",\r\n            \"addressLine1\",\r\n            \"addressLine2\",\r\n            \"city\",\r\n            \"country\",\r\n            \"subdivision\",\r\n            \"zipCode\",\r\n            \"phoneNumber\",\r\n            \"setAsDefault\"\r\n        ]\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/{{ID}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"{{ID}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Show modify spec address",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// test with if-else\r",
+							"if (responseCode.code === 200) {\r",
+							"    tests[\"Backend is OK, response code is 200.\"] = true;\r",
+							"} else if (responseCode.code === 401) {\r",
+							"    tests[\"Not autorised, response code is 401.\"] = false;\r",
+							"} else if (responseCode.code === 403) {\r",
+							"    tests[\"Forbiden, response code is 403.\"] = false;\r",
+							"} else if (responseCode.code === 404) {\r",
+							"    tests[\"Not found, response code is 404.\"] = false;\r",
+							"} else if (responseCode.code === 422) {\r",
+							"    tests[\"Thr instance is not valid, response code is 422.\"] = false;\r",
+							"} else {\r",
+							"    tests[\"Something went wrong. Check response body.\"] = false;\r",
+							"}\r",
+							"\r",
+							"// Assert by text filter - added company\r",
+							"pm.test(\"company is Svoya...\", function () {\r",
+							"    pm.expect(pm.response.text()).to.include(\"company\", \"Svoya\");\r",
+							"});\r",
+							"\r",
+							"// Check modify address with new ID  \r",
+							"pm.test(\"ID is correct\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"     pm.expect(jsonData.address.id).to.eql(pm.environment.get(\"ID\"));\r",
+							"});\r",
+							"\r",
+							"// Check modify address with new company  by JSON parse\r",
+							"pm.test(\"Company is correct\", function () {\r",
+							"    var jsonData = JSON.parse(responseBody);\r",
+							"    jsonData.company === (pm.environment.get(\"company\"));\r",
+							"});\r",
+							"\r",
+							"// Again check modify address with new company \r",
+							"pm.test(\"Company is correct again\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"     pm.expect(jsonData.address.company).to.eql(pm.environment.get(\"company\"));\r",
+							"});\r",
+							"\r",
+							"// Response OK to process \r",
+							"pm.test(\"Response assertions\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"    pm.response.to.be.ok;\r",
+							"    pm.response.to.be.json;\r",
+							"    pm.response.to.not.be.error;\r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.not.have.jsonBody(\"error\");\r",
+							"    pm.response.to.have.jsonBody({});            \r",
+							"});\r",
+							"\r",
+							"// Check body of correct format \r",
+							"pm.test(\"Response body in correct format\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.address).to.be.a('object');   \r",
+							"    pm.expect(jsonData.address.fullName).to.be.a('object');       \r",
+							"    pm.expect(jsonData.address.fullName.firstName).to.be.a('string'); \r",
+							"    pm.expect(jsonData.address.fullName.lastName).to.be.a('string'); \r",
+							"    pm.expect(jsonData.address.country).to.be.a('string');\r",
+							"    pm.expect(jsonData.address.subdivision).to.be.a('string'); \r",
+							"    pm.expect(jsonData.address.city).to.be.a('string');  \r",
+							"    pm.expect(jsonData.address.zipCode).to.be.a('string');     \r",
+							"    pm.expect(jsonData.address.phoneNumber).to.be.a('string');     \r",
+							"    pm.expect(jsonData.address.addressLine1).to.be.a('string');  \r",
+							"    pm.expect(jsonData.address.addressLine2).to.be.a('string'); \r",
+							"    pm.expect(jsonData.address.id).to.be.a('string'); \r",
+							"    pm.expect(jsonData.isDefaultAddress).to.be.a('boolean'); \r",
+							"});\r",
+							"\r",
+							"// Check Header\r",
+							"pm.test(\"Header is correct\", function () {\r",
+							"    pm.response.to.have.header(\"Content-Type\", \"application/json;charset=utf-8\");\r",
+							"    // pm.response.to.have.header(\"Content-Length\", \"2\");\r",
+							"    pm.response.to.have.header(\"Connection\", \"keep-alive\");\r",
+							"    pm.response.to.have.header(\"X-Content-Type-Options\", \"nosniff\");   \r",
+							"    pm.response.to.have.header(\"Server\", \"Pepyaka/1.15.10\");\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{url}}/{{ID}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"{{ID}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete spec address",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// test with if-else\r",
+							"if (responseCode.code === 200) {\r",
+							"    tests[\"Backend is OK, response code is 200.\"] = true;\r",
+							"} else if (responseCode.code === 401) {\r",
+							"    tests[\"Not autorised, response code is 401.\"] = false;\r",
+							"} else if (responseCode.code === 403) {\r",
+							"    tests[\"Forbiden, response code is 403.\"] = false;\r",
+							"} else if (responseCode.code === 404) {\r",
+							"    tests[\"Not found, response code is 404.\"] = false;\r",
+							"} else if (responseCode.code === 422) {\r",
+							"    tests[\"Thr instance is not valid, response code is 422.\"] = false;\r",
+							"} else {\r",
+							"    tests[\"Something went wrong. Check response body.\"] = false;\r",
+							"}\r",
+							"\r",
+							"// Response OK to process \r",
+							"pm.test(\"Response assertions\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"    pm.response.to.be.ok;\r",
+							"    pm.response.to.be.json;\r",
+							"    pm.response.to.not.be.error;\r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.an('object');    \r",
+							"    pm.response.to.not.have.jsonBody(\"error\");    \r",
+							"    pm.response.to.have.jsonBody({});   \r",
+							"});\r",
+							"\r",
+							"// Check Response time\r",
+							"pm.test(\"Response time is less than 1000ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+							"});\r",
+							"\r",
+							"// Check Response size\r",
+							"pm.test(\"Response size is less than 2000\", function () {\r",
+							"    pm.expect(pm.response.responseSize).to.be.below(2000);\r",
+							"});\r",
+							"\r",
+							"// Check Header\r",
+							"pm.test(\"Header is correct\", function () {\r",
+							"    pm.response.to.have.header(\"Content-Type\", \"application/json;charset=utf-8\");\r",
+							"    // pm.response.to.have.header(\"Content-Length\", \"2\");\r",
+							"    pm.response.to.have.header(\"Connection\", \"keep-alive\");\r",
+							"    pm.response.to.have.header(\"X-Content-Type-Options\", \"nosniff\");   \r",
+							"    pm.response.to.have.header(\"Server\", \"Pepyaka/1.15.10\");\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{url}}/{{ID}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"{{ID}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete address 2nd time",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// test with if-else\r",
+							"if (responseCode.code === 200) {\r",
+							"    tests[\"Backend is OK, response code is 200.\"] = false;\r",
+							"} else if (responseCode.code === 401) {\r",
+							"    tests[\"Not autorised, response code is 401.\"] = true;\r",
+							"} else if (responseCode.code === 400) {\r",
+							"    tests[\"Bad request is OK, response code is 400.\"] = true;    \r",
+							"} else if (responseCode.code === 403) {\r",
+							"    tests[\"Forbiden, response code is 403.\"] = true;\r",
+							"} else if (responseCode.code === 404) {\r",
+							"    tests[\"Not found, response code is 404.\"] = true;\r",
+							"} else if (responseCode.code === 422) {\r",
+							"    tests[\"Thr instance is not valid, response code is 422.\"] = true;\r",
+							"} else {\r",
+							"    tests[\"Something went wrong. Check response body.\"] = true;\r",
+							"}\r",
+							"pm.test(\"Status code is 400\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"// Check Response time\r",
+							"pm.test(\"Response time is less than 1000ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+							"});\r",
+							"\r",
+							"// Check Response size\r",
+							"pm.test(\"Response size is less than 1000\", function () {\r",
+							"    pm.expect(pm.response.responseSize).to.be.below(1000);\r",
+							"});\r",
+							"\r",
+							"// Check Header\r",
+							"pm.test(\"Header is correct\", function () {\r",
+							"    pm.response.to.have.header(\"Content-Type\", \"application/json;charset=utf-8\");\r",
+							"    // pm.response.to.have.header(\"Content-Length\", \"2\");\r",
+							"    pm.response.to.have.header(\"Connection\", \"keep-alive\");\r",
+							"    pm.response.to.have.header(\"X-Content-Type-Options\", \"nosniff\");   \r",
+							"    pm.response.to.have.header(\"Server\", \"Pepyaka/1.15.10\");\r",
+							"});\r",
+							"\r",
+							"// Response OK to process \r",
+							"pm.test(\"Response assertions\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"    pm.response.to.be.badRequest;\r",
+							"    pm.response.to.be.json;\r",
+							"    pm.response.to.be.error;\r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.an('object');    \r",
+							"    pm.response.to.not.have.jsonBody(\"error\");    \r",
+							"    pm.response.to.have.jsonBody({});   \r",
+							"});\r",
+							"\r",
+							"// Assert by text filter - present deleted ID\r",
+							"pm.test(\"Message include deleted ID\", function () {\r",
+							"    pm.expect(pm.response.text()).to.include(pm.environment.get(\"ID\"));\r",
+							"});\r",
+							"\r",
+							"//Strong assertion \r",
+							"pm.test(\"Message details ID is correct\", function () {\r",
+							"    const jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.details.cant_find).to.eql(\"address_id: \" + pm.environment.get(\"ID\"));\r",
+							"});\r",
+							"\r",
+							"pm.environment.set(\"variable_key\", \"variable_value\");"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{url}}/{{ID}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"{{ID}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Check deleted address",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// test with if-else\r",
+							"if (responseCode.code === 200) {\r",
+							"    tests[\"Backend is OK, response code is 200.\"] = false;\r",
+							"} else if (responseCode.code === 401) {\r",
+							"    tests[\"Not autorised, response code is 401.\"] = true;\r",
+							"} else if (responseCode.code === 400) {\r",
+							"    tests[\"Bad request is OK, response code is 400.\"] = true;    \r",
+							"} else if (responseCode.code === 403) {\r",
+							"    tests[\"Forbiden, response code is 403.\"] = true;\r",
+							"} else if (responseCode.code === 404) {\r",
+							"    tests[\"Not found, response code is 404.\"] = true;\r",
+							"} else if (responseCode.code === 422) {\r",
+							"    tests[\"Thr instance is not valid, response code is 422.\"] = true;\r",
+							"} else {\r",
+							"    tests[\"Something went wrong. Check response body.\"] = true;\r",
+							"}\r",
+							"pm.test(\"Status code is 400\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"// Check Response time\r",
+							"pm.test(\"Response time is less than 1000ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+							"});\r",
+							"\r",
+							"// Check Response size\r",
+							"pm.test(\"Response size is less than 1000\", function () {\r",
+							"    pm.expect(pm.response.responseSize).to.be.below(1000);\r",
+							"});\r",
+							"\r",
+							"// Check Header\r",
+							"pm.test(\"Header is correct\", function () {\r",
+							"    pm.response.to.have.header(\"Content-Type\", \"application/json;charset=utf-8\");\r",
+							"    // pm.response.to.have.header(\"Content-Length\", \"2\");\r",
+							"    pm.response.to.have.header(\"Connection\", \"keep-alive\");\r",
+							"    pm.response.to.have.header(\"X-Content-Type-Options\", \"nosniff\");   \r",
+							"    pm.response.to.have.header(\"Server\", \"Pepyaka/1.15.10\");\r",
+							"});\r",
+							"\r",
+							"// Response OK to process \r",
+							"pm.test(\"Response assertions\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"    pm.response.to.be.badRequest;\r",
+							"    pm.response.to.be.json;\r",
+							"    pm.response.to.be.error;\r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.an('object');    \r",
+							"    pm.response.to.not.have.jsonBody(\"error\");    \r",
+							"    pm.response.to.have.jsonBody({});   \r",
+							"});\r",
+							"\r",
+							"// Assert by text filter - present deleted ID\r",
+							"pm.test(\"Message include deleted ID\", function () {\r",
+							"    pm.expect(pm.response.text()).to.include(pm.environment.get(\"ID\"));\r",
+							"});\r",
+							"\r",
+							"//Strong assertion \r",
+							"pm.test(\"Message details ID is correct\", function () {\r",
+							"    const jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.details.cant_find).to.eql(\"address_id: \" + pm.environment.get(\"ID\"));\r",
+							"});\r",
+							"\r",
+							"pm.environment.set(\"variable_key\", \"variable_value\");"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{url}}/{{ID}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"{{ID}}"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": null,
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "apikey",
+		"apikey": [
+			{
+				"key": "key",
+				"value": "Authorization",
+				"type": "string"
+			},
+			{
+				"key": "value",
+				"value": "-K0Xro1-ADOo0p4ugLpAhzNMWTIhO_lcLq4xz713Zzc.eyJpbnN0YW5jZUlkIjoiZjQ2Y2Q1MDItZjcyZi00NGY3LTk2MzgtNWRhMWRlYjBiNGU3IiwiYXBwRGVmSWQiOiIxNTA1Yjc3NS1lODg1LWViMWItYjY2NS0xZTQ4NWQ5YmY5MGUiLCJtZXRhU2l0ZUlkIjoiMjhiNzkzZDYtNTQyNC00MDU4LTgwNDktMDI2YTRkYjAyODJmIiwic2lnbkRhdGUiOiIyMDIxLTEwLTI2VDE2OjI3OjM4LjE1MVoiLCJ1aWQiOiI2MDdkNjU4OS0wZGRlLTQxM2QtYjA4YS05ZmE5YTlkNWExZGQiLCJkZW1vTW9kZSI6ZmFsc2UsImFpZCI6IjIxZGIzNDAwLTU3YzktNDhmOC1iOTBiLTJlOGRlMjEwZTBlYyIsImJpVG9rZW4iOiJkY2RiNDZkNC1hMzBiLTA0YWYtMTY3MS01ZmNiOTMwMDljYzgiLCJzaXRlT3duZXJJZCI6ImY5MTRmMTFjLWFhYjMtNDUyNy04ZDRlLWJhYjc2MjE0M2E2MCIsImV4cGlyYXRpb25EYXRlIjoiMjAyMS0xMC0yNlQyMDoyNzozOC4xNTFaIiwiaGFzVXNlclJvbGUiOmZhbHNlfQ",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "url",
+			"value": "https://addresses.wixapps.net/_api/addresses-web/v1/addresses"
+		}
+	]
+}
